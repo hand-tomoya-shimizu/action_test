@@ -14,7 +14,7 @@ def main():
         "Accept": "application/vnd.github+json",
         "Authorization": f"Bearer {tokenGithub}"
     }
-    print(f"tokenGithub: {tokenGithub}")
+    #print(f"tokenGithub: {tokenGithub}")
         
     pr_url = f"{os.environ['GITHUB_API_URL']}/repos/{os.environ['GITHUB_REPOSITORY']}/pulls/{pr_number}"
     print(f"pr_url: {pr_url}")
