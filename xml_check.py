@@ -6,7 +6,7 @@ import logging
 # ログの出力先のファイルを指定
 #logging.basicConfig(filename='test.log', level=logging.DEBUG)
 
-tokenGithub:str = "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"
+tokenGithub:str = "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"
 
 def main():
     pr_number = sys.argv[1]
