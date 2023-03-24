@@ -11,8 +11,10 @@ jobs:
       - name: Show diff
         run: |
           echo "PR number: ${{ github.event.number }}"
+          echo "PR before: ${{ github.event.before }}"
+          echo "PR sha: ${{ github.sha }}"
           echo "Changed files:"
-          diff_files=$(git diff HEAD^ HEAD --name-only)
+          diff_files=$(git diff ${{ github.event.before }}..${{ github.sha }} --name-only)
           echo "# diff_files: ${diff_files}"
           if echo "${diff_files}" | grep -q '\.xml$'; then
             echo "XML file(s) found."
