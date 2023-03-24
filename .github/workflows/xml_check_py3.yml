@@ -1,8 +1,6 @@
-name: PR Diff
+name: xmlファイルが含まれているか確認
 
-on:
-  pull_request:
-    types: [opened, synchronize]
+on: [pull_request]
 
 jobs:
   diff:
