@@ -25,12 +25,17 @@ print(f"@ diff_text: {diff_text}")
 
 if '.xml' in diff_text:
     print("プルリクエストでXMLファイルが変更されました")
+    
     slack_token = os.environ['SLACK_BOT_TOKEN']
+    
     client = WebClient(token=slack_token)
-    channel = os.environ['SLACK_CHANNEL']
+    
+    channelName = os.environ['SLACK_CHANNEL']
+    print(f"@ channelName: {channelName}")
+    
     message = "プルリクエストでXMLファイルが変更されました。レビューをお願いします。"
     try:
-        response = client.chat_postMessage(channel=channel, text=message)
+        response = client.chat_postMessage(channel=channelName, text=message)
         print("Slackへの通知が完了しました")
     except SlackApiError as e:
         print("Slackへの通知が失敗しました：{}".format(e))

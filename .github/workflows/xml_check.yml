@@ -27,4 +27,4 @@ jobs:
         GITHUB_REPOSITORY: ${{ github.repository }}
         PR_NUMBER: ${{ github.event.number }}
         SLACK_BOT_TOKEN: xoxb-3321671539026-5017684223201-3XDKf5TB2OEpOcTxQAh1nwJC
-        SLACK_CHANNEL: C04VCEQD56J
+        SLACK_CHANNEL: #xml更新監視所
