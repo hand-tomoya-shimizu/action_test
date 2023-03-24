@@ -36,7 +36,7 @@ if '.xml' in diff_text:
     htmlUrl = pull_request_data['html_url']
     print(f"@ htmlUrl: {htmlUrl}")
     
-    message = "プルリクエストでXMLファイルが変更されました。\nレビューをお願いします。\n"
+    message = "プルリクエストでXMLファイルの変更を検知しました。\nレビューをお願いします。\n"
     message += htmlUrl
     
     try:
