@@ -33,7 +33,12 @@ if '.xml' in diff_text:
     channelName = os.environ['SLACK_CHANNEL']
     print(f"@ channelName: {channelName}")
     
-    message = "プルリクエストでXMLファイルが変更されました。レビューをお願いします。"
+    html_url = pull_request_data['html_url']
+	print(f"@ html_url: {html_url}")
+    
+    message = "プルリクエストでXMLファイルが変更されました。\nレビューをお願いします。\n"
+    message += html_url
+    
     try:
         response = client.chat_postMessage(channel=channelName, text=message)
         print("Slackへの通知が完了しました")
