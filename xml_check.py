@@ -1,44 +1,29 @@
 import os
 import requests
-import sys
-import logging
 
-# ログの出力先のファイルを指定
-#logging.basicConfig(filename='test.log', level=logging.DEBUG)
+# プルリクエストのURL
+pull_request_url = os.environ['GITHUB_API_URL'] + '/repos/' + os.environ['GITHUB_REPOSITORY'] + '/pulls/' + os.environ['PR_NUMBER']
+print(f"@ pull_request_url: {pull_request_url}")
 
-tokenGithub:str = "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"
+# APIリクエストを送信して、変更内容を取得する
+response = requests.get(pull_request_url)
+print(f"@ response1: {response}")
 
-def main():
-    pr_number = sys.argv[1]
-    headers = {
-        "Accept": "application/vnd.github+json",
-        "Authorization": f"Bearer {tokenGithub}"
-    }
-    #print(f"tokenGithub: {tokenGithub}")
-        
-    pr_url = f"{os.environ['GITHUB_API_URL']}/repos/{os.environ['GITHUB_REPOSITORY']}/pulls/{pr_number}"
-    print(f"pr_url: {pr_url}")
-    
-    pr_response = requests.get(pr_url, headers=headers)
-    print(f"pr_response: {pr_response}")
-    
-    pr_response_json = pr_response.json()
-    print(f"pr_response_json: {pr_response_json}")
-    
-    files_url = pr_response_json['url'] + "/files"
-    print(f"files_url: {files_url}")
-    
-    files_response = requests.get(files_url, headers=headers)
-    print(f"files_response: {files_response}")
-    
-    files_response_json = files_response.json()
-    print(f"files_response_json: {files_response_json}")
+pull_request_data = response.json()
 
-    # Check if any XML files are present in the pull request
-    for file in files_response_json:
-        if file['filename'].endswith('.xml'):
-            print(f"XML file found in {file['filename']}")
-            sys.exit(1)
+# 変更されたファイルの内容を取得して、XMLファイルが含まれているか確認する
+diff_url = pull_request_data['diff_url']
+print(f"@ diff_url: {diff_url}")
 
-if __name__ == '__main__':
-    main()
+diff_response = requests.get(diff_url)
+print(f"@ response2: {response}")
+
+diff_text = diff_response.text
+print(f"@ diff_text: {diff_text}")
+
+if '.xml' in diff_text:
+    print("プルリクエストでXMLファイルが変更されました")
+    exit(1)
+
+print("プルリクエストでXMLファイルは変更されていません")
+exit(0)

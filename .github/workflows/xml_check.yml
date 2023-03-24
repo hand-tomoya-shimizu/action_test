@@ -1,4 +1,4 @@
-name: XML Change Check
+name: 更新内容にxmlファイルが含まれているか確認
 
 on: [pull_request]
 
@@ -18,7 +18,7 @@ jobs:
       run: pip install requests
       
     - name: Check XML change
-      run: python xml_check4.py
+      run: python xml_check.py
       env:
         GITHUB_API_URL: ${{ github.api_url }}
         GITHUB_REPOSITORY: ${{ github.repository }}
