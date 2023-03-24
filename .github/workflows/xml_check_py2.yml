@@ -1,8 +1,6 @@
 name: Check XML files in PR
 
-on:
-  pull_request:
-    types: [opened, synchronize]
+on: [pull_request]
 
 jobs:
   check-xml-files:
