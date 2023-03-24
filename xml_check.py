@@ -1,5 +1,7 @@
 import os
 import requests
+from slack_sdk import WebClient
+from slack_sdk.errors import SlackApiError
 
 # プルリクエストのURL
 pull_request_url = os.environ['GITHUB_API_URL'] + '/repos/' + os.environ['GITHUB_REPOSITORY'] + '/pulls/' + os.environ['PR_NUMBER']
@@ -23,7 +25,16 @@ print(f"@ diff_text: {diff_text}")
 
 if '.xml' in diff_text:
     print("プルリクエストでXMLファイルが変更されました")
-    exit(1)
+    slack_token = os.environ['SLACK_BOT_TOKEN']
+    client = WebClient(token=slack_token)
+    channel = os.environ['SLACK_CHANNEL']
+    message = "プルリクエストでXMLファイルが変更されました。レビューをお願いします。"
+    try:
+        response = client.chat_postMessage(channel=channel, text=message)
+        print("Slackへの通知が完了しました")
+    except SlackApiError as e:
+        print("Slackへの通知が失敗しました：{}".format(e))
+else:
+    print("プルリクエストでXMLファイルは変更されていません")
 
-print("プルリクエストでXMLファイルは変更されていません")
 exit(0)

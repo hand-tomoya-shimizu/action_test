@@ -17,9 +17,14 @@ jobs:
     - name: Install requests library
       run: pip install requests
       
+    - name: Install slack-sdk library
+      run: pip install slack-sdk
+      
     - name: Check XML change
       run: python xml_check.py
       env:
         GITHUB_API_URL: ${{ github.api_url }}
         GITHUB_REPOSITORY: ${{ github.repository }}
         PR_NUMBER: ${{ github.event.number }}
+        SLACK_BOT_TOKEN: xoxb-3321671539026-5017684223201-3XDKf5TB2OEpOcTxQAh1nwJC
+        SLACK_CHANNEL: C04VCEQD56J
