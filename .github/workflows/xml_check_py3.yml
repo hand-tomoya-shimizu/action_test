@@ -1,0 +1,23 @@
+name: PR Diff
+
+on:
+  pull_request:
+    types: [opened, synchronize]
+
+jobs:
+  diff:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+      - name: Show diff
+        run: |
+          echo "PR number: ${{ github.event.number }}"
+          echo "Changed files:"
+          git diff --name-only HEAD^..HEAD > changed_files.txt
+          if grep -q '\.xml$' changed_files.txt; then
+            echo "XML file(s) found."
+            #curl -X POST -H 'Content-type: application/json' --data '{"text":"XML file(s) found in PR #'"${{ github.event.number }}"'."}' $SLACK_WEBHOOK_URL
+          else
+            echo "No XML file(s) found."
+          fi
