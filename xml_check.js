@@ -7,7 +7,7 @@ async function run() {
     const token = process.env.GITHUB_TOKEN
     console.log(`@ token: ${token}`);
     
-    const pull_number = core.getInput('pull_number');
+    const pull_number = process.env.PULL_NUMBER
     console.log(`@ pull_number: ${pull_number}`);
     
     const octokit = github.getOctokit(token);

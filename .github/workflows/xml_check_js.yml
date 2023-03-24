@@ -23,5 +23,4 @@ jobs:
         run: node xml_check.js
         env:
           GITHUB_TOKEN: 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
-        with:
-          pull_number: ${{ github.event.pull_request.number }}
+          PULL_NUMBER: ${{ github.event.pull_request.number }}
