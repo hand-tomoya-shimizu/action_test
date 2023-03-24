@@ -12,7 +12,11 @@ XML_FILE_PATTERN = "\.xml$"
 # プルリクエストの差分に XML ファイルが含まれているかどうかを確認する関数
 def is_xml_file_updated():
     diff_command = "git diff --name-only HEAD^..HEAD"
+    print(f"@ diff_command: {diff_command}")
+    
     diff_output = subprocess.check_output(diff_command, shell=True).decode()
+    print(f"@ diff_output: {diff_output}")
+    
     return any(path.endswith(".xml") for path in diff_output.split("\n"))
 
 # Slack に通知する関数
