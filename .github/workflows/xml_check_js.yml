@@ -23,5 +23,5 @@ jobs:
       - name: Run review
         run: node xml_check.js
         env:
-          GITHUB_TOKEN: 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
+          GITHUB_TOKEN: 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
           PULL_NUMBER: ${{ github.event.pull_request.number }}
