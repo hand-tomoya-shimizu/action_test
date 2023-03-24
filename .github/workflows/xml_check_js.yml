@@ -1,8 +1,6 @@
 name: Pull Request XML Review
 
-on:
-  pull_request:
-    types: [opened, edited, reopened, synchronize]
+on: [pull_request]
 
 jobs:
   review:
@@ -10,13 +8,20 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
+        
       - name: Setup Node.js
         uses: actions/setup-node@v2
         with:
           node-version: '14'
+          
       - name: Install dependencies
-        run: npm install
+        run: |
+          npm install
+          npm install -g xmldom
+          
       - name: Run review
         run: node xml_check.js
         env:
-          GITHUB_TOKEN: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
+          GITHUB_TOKEN: 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
+        with:
+          pull_number: ${{ github.event.pull_request.number }}
