@@ -17,7 +17,7 @@ async function run() {
       repo: github.context.repo.repo,
       pull_number: pull_number
     });
-    console.log(`@ pullRequest: ${pullRequest}`);
+    console.log(`@ pullRequest: ${JSON.stringify(pullRequest)}`);
     
     const files = pullRequest.changed_files;
 
