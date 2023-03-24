@@ -20,9 +20,5 @@ jobs:
       - name: Check XML files in PR
         env:
           PULL_REQUEST_URL: ${{ github.event.pull_request.html_url }}
+          #SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
         run: python xml_check2.py
-
-        # 以下は Python スクリプトで定義した環境変数 SLACK_WEBHOOK_URL を Secrets から取得する設定です。
-        # Secrets に設定されている SLACK_WEBHOOK_URL は、この YAML ファイル内で ${{ secrets.SLACK_WEBHOOK_URL }} として参照できます。
-        env:
-          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
