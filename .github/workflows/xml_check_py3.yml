@@ -12,8 +12,9 @@ jobs:
         run: |
           echo "PR number: ${{ github.event.number }}"
           echo "Changed files:"
-          git diff --name-only HEAD^..HEAD > changed_files.txt
-          if grep -q '\.xml$' changed_files.txt; then
+          diff_files=$(git diff ${{ github.event.before }} ${{ github.event.after }} --name-only)
+          echo "# diff_files: ${diff_files}"
+          if echo "${diff_files}" | grep -q '\.xml$'; then
             echo "XML file(s) found."
             #curl -X POST -H 'Content-type: application/json' --data '{"text":"XML file(s) found in PR #'"${{ github.event.number }}"'."}' $SLACK_WEBHOOK_URL
           else
