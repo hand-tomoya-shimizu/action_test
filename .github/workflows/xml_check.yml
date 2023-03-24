@@ -27,4 +27,4 @@ jobs:
         GITHUB_REPOSITORY: ${{ github.repository }}
         PR_NUMBER: ${{ github.event.number }}
         SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
-        SLACK_CHANNEL: #xml更新監視所
+        SLACK_CHANNEL: "#xml更新監視所"
