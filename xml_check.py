@@ -12,7 +12,7 @@ def add_reviewers():
     targetIds = []
     reviewers = []
     
-    with open('reviewers_test.csv', 'r') as f:
+    with open('reviewers.csv', 'r') as f:
         reader = csv.reader(f)
         for row in reader:
             targetName = row[1]
@@ -27,7 +27,7 @@ def add_reviewers():
             except UnknownObjectException:
                 print(f"@ -> not exist.")
     
-    if len(targetIds) == 0:
+    if len(reviewers) > 0:
         repo = g.get_repo( os.getenv('GITHUB_REPOSITORY') )
         pr_number = int(os.getenv('PR_NUMBER'))
         pr = repo.get_pull(pr_number)
