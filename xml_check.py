@@ -3,7 +3,7 @@ import requests
 import csv
 from slack_sdk import WebClient
 from slack_sdk.errors import SlackApiError
-from github import Github
+from github import Github, UnknownObjectException
 
 def add_reviewers():
     print("@ add_reviewers()")
@@ -29,13 +29,13 @@ def add_reviewers():
             except UnknownObjectException:
                 print(f"@ -> not exist.")
     
-    if len(targetNames) > 0:
+    if len(reviewers) > 0:
         repo = g.get_repo( os.getenv('GITHUB_REPOSITORY') )
         pr_number = int(os.getenv('PR_NUMBER'))
         pr = repo.get_pull(pr_number)
         
         try:
-            pr.create_review_request(reviewers=targetNames)
+            pr.create_review_request(reviewers=reviewers)
         except UnknownObjectException:
             print(f"@ Error : create_review_request()")
     
