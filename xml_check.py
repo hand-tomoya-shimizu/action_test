@@ -9,23 +9,29 @@ def add_reviewers():
     print("@ add_reviewers()")
     g = Github(os.getenv('GITHUB_TOKEN'))
     
+    targetNames = []
+    reviewers = []
+    
     with open('reviewers_test.csv', 'r') as f:
         reader = csv.reader(f)
-        targetNames = []
-        reviewers = []
         for row in reader:
             targetName = row[1]
-            targetNames.append(targetName)
             print(f"@ targetName: {targetName}")
             
-            user = g.get_user(targetName)
-            reviewers.append(user)
-            
-    repo = g.get_repo( os.getenv('GITHUB_REPOSITORY') )
-    pr_number = int(os.getenv('PR_NUMBER'))
-    pr = repo.get_pull(pr_number)
+            try:
+                user = g.get_user("hand-tomoya-shimizu")
+                reviewers.append(user)
+                targetNames.append(targetName)
+                print(f"@ -> append.")
+            except UnknownObjectException:
+                print(f"@ -> not exist.")
     
-    pr.create_review_request(reviewers=reviewers)
+    if len(targetNames) == 0:
+        repo = g.get_repo( os.getenv('GITHUB_REPOSITORY') )
+        pr_number = int(os.getenv('PR_NUMBER'))
+        pr = repo.get_pull(pr_number)
+        
+        pr.create_review_request(reviewers=reviewers)
     
     return targetNames
 
