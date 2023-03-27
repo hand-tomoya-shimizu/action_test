@@ -5,13 +5,18 @@ from slack_sdk.errors import SlackApiError
 
 
 def add_reviewers():
+    print("@ add_reviewers()")
     g = Github(os.getenv('GITHUB_TOKEN'))
     
     with open('reviewers_test.csv', 'r') as f:
         reader = csv.reader(f)
         reviewers = []
         for row in reader:
-            user = g.get_user(row[1])
+            targetName = row[1]
+            targetNames.append(targetName)
+            print(f"@ targetName: {targetName}")
+            
+            user = g.get_user(targetName)
             reviewers.append(user)
             
     repo = g.get_repo( os.getenv('GITHUB_REPOSITORY') )
@@ -19,6 +24,8 @@ def add_reviewers():
     pr = repo.get_pull(pr_number)
     
     pr.create_review_request(reviewers=reviewers)
+    
+    return targetNames
 
 
 # プルリクエストのURL
@@ -42,7 +49,7 @@ diff_text = diff_response.text
 #print(f"@ diff_text: {diff_text}")
 
 if '.xml' in diff_text:
-    add_reviewers()
+    reviewerNames = add_reviewers()
     
     print("プルリクエストでXMLファイルが変更されました")
     
@@ -56,7 +63,13 @@ if '.xml' in diff_text:
     htmlUrl = pull_request_data['html_url']
     print(f"@ htmlUrl: {htmlUrl}")
     
-    message = "プルリクエストでXMLファイルの変更を検知しました。\nレビューをお願いします。\n"
+    
+    message = ""
+    
+    for reviewerName in reviewerNames:
+        message += reviewerName + "\n"
+    
+    message += "プルリクエストでXMLファイルの変更を検知しました。\nレビューをお願いします。\n"
     message += htmlUrl
     
     try:
