@@ -25,7 +25,11 @@ jobs:
       
     - name: Check XML change
       run: |
-        wget reviewers_test.csv
+        repo_url=${{ github.repository }}
+        csv_file="reviewers_test.csv"
+        csv_url="https://raw.githubusercontent.com/$repo_url/main/$csv_file"
+        echo "CSV URL: $csv_url"
+        wget $csv_url
         python xml_check.py
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
