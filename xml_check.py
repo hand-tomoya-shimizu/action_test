@@ -35,9 +35,14 @@ def add_reviewers():
         repo = g.get_repo( os.getenv('GITHUB_REPOSITORY') )
         pr_number = int(os.getenv('PR_NUMBER'))
         pr = repo.get_pull(pr_number)
+        author = pr.user
         
         for reviewer in reviewers:
             print(f"@ reviewer: {reviewer}")
+            
+            if reviewer == author:
+                print("@ -> skipped.")
+                continue
             
             try:
                 print(f"@ reviewer.login: {reviewer.login}")
