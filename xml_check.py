@@ -2,7 +2,7 @@ import os
 import requests
 from slack_sdk import WebClient
 from slack_sdk.errors import SlackApiError
-
+from github import Github
 
 def add_reviewers():
     print("@ add_reviewers()")
