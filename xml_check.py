@@ -9,31 +9,32 @@ def add_reviewers():
     print("@ add_reviewers()")
     g = Github(os.getenv('GITHUB_TOKEN'))
     
-    targetNames = []
+    targetIds = []
     reviewers = []
     
     with open('reviewers_test.csv', 'r') as f:
         reader = csv.reader(f)
         for row in reader:
             targetName = row[1]
-            print(f"@ targetName: {targetName}")
+            targetId = row[2]
+            print(f"@ targetName: {targetName} ({targetId})")
             
             try:
                 user = g.get_user("hand-tomoya-shimizu")
                 reviewers.append(user)
-                targetNames.append(targetName)
+                targetIds.append(targetId)
                 print(f"@ -> append.")
             except UnknownObjectException:
                 print(f"@ -> not exist.")
     
-    if len(targetNames) == 0:
+    if len(targetIds) == 0:
         repo = g.get_repo( os.getenv('GITHUB_REPOSITORY') )
         pr_number = int(os.getenv('PR_NUMBER'))
         pr = repo.get_pull(pr_number)
         
         pr.create_review_request(reviewers=reviewers)
     
-    return targetNames
+    return targetIds
 
 
 # プルリクエストのURL
@@ -57,7 +58,7 @@ diff_text = diff_response.text
 #print(f"@ diff_text: {diff_text}")
 
 if '.xml' in diff_text:
-    reviewerNames = add_reviewers()
+    reviewerIds = add_reviewers()
     
     print("プルリクエストでXMLファイルが変更されました")
     
@@ -74,8 +75,11 @@ if '.xml' in diff_text:
     
     message = ""
     
-    for reviewerName in reviewerNames:
-        message += reviewerName + "\n"
+    if len(reviewerIds) > 0:
+        for reviewerId in reviewerIds:
+            message += f"<@{reviewerId}>"
+        
+        message += "\n"
     
     message += "プルリクエストでXMLファイルの変更を検知しました。\nレビューをお願いします。\n"
     message += htmlUrl
