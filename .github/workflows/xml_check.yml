@@ -20,9 +20,15 @@ jobs:
     - name: Install slack-sdk library
       run: pip install slack-sdk
       
+    - name: Install PyGithub
+      run: pip install PyGithub
+      
     - name: Check XML change
-      run: python xml_check.py
+      run: |
+        wget reviewers_test.csv
+        python xml_check.py
       env:
+      	GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         GITHUB_API_URL: ${{ github.api_url }}
         GITHUB_REPOSITORY: ${{ github.repository }}
         PR_NUMBER: ${{ github.event.number }}
