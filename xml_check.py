@@ -37,9 +37,10 @@ def add_reviewers():
         pr = repo.get_pull(pr_number)
         
         for reviewer in reviewers:
-            #print(f"@ reviewer: {reviewer}")
+            print(f"@ reviewer: {reviewer}")
             
             try:
+                print(f"@ reviewer.login: {reviewer.login}")
                 pr.create_review_request(reviewers=[reviewer.login])
             except UnknownObjectException:
                 print(f"@ Error: {reviewer.login} is not exist.")
