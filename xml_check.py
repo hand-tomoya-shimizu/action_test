@@ -9,6 +9,7 @@ def add_reviewers():
     print("@ add_reviewers()")
     g = Github(os.getenv('GITHUB_TOKEN'))
     
+    targetNames = []
     targetIds = []
     reviewers = []
     
@@ -22,17 +23,21 @@ def add_reviewers():
             try:
                 user = g.get_user("hand-tomoya-shimizu")
                 reviewers.append(user)
+                targetNames.append(targetName)
                 targetIds.append(targetId)
                 print(f"@ -> append.")
             except UnknownObjectException:
                 print(f"@ -> not exist.")
     
-    if len(reviewers) > 0:
+    if len(targetNames) > 0:
         repo = g.get_repo( os.getenv('GITHUB_REPOSITORY') )
         pr_number = int(os.getenv('PR_NUMBER'))
         pr = repo.get_pull(pr_number)
         
-        pr.create_review_request(reviewers=reviewers)
+        try:
+            pr.create_review_request(reviewers=targetNames)
+        except UnknownObjectException:
+            print(f"@ Error : create_review_request()")
     
     return targetIds
 
