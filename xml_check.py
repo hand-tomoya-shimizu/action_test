@@ -11,6 +11,7 @@ def add_reviewers():
     
     with open('reviewers_test.csv', 'r') as f:
         reader = csv.reader(f)
+        targetNames = []
         reviewers = []
         for row in reader:
             targetName = row[1]
