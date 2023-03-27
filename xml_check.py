@@ -21,11 +21,13 @@ def add_reviewers():
             print(f"@ targetName: {targetName} ({targetId})")
             
             try:
-                user = g.get_user("hand-tomoya-shimizu")
+                user = g.get_user(targetName)
+                print(f"@ -> append.")
+                
                 reviewers.append(user)
                 targetNames.append(targetName)
                 targetIds.append(targetId)
-                print(f"@ -> append.")
+                
             except UnknownObjectException:
                 print(f"@ -> not exist.")
     
@@ -39,7 +41,6 @@ def add_reviewers():
                 pr.create_review_request(reviewers=[reviewer])
             except UnknownObjectException:
                 print(f"@ Error: {reviewer.login} is not exist.")
-                reviewers.remove(reviewer)
                 continue
     
     return targetIds
