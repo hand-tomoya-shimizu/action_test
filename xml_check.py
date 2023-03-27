@@ -34,10 +34,13 @@ def add_reviewers():
         pr_number = int(os.getenv('PR_NUMBER'))
         pr = repo.get_pull(pr_number)
         
-        try:
-            pr.create_review_request(reviewers=reviewers)
-        except UnknownObjectException:
-            print(f"@ Error : create_review_request()")
+        for reviewer in reviewers:
+            try:
+                pr.create_review_request(reviewers=[reviewer])
+            except UnknownObjectException:
+                print(f"@ Error: {reviewer.login} is not exist.")
+                reviewers.remove(reviewer)
+                continue
     
     return targetIds
 
