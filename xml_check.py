@@ -14,12 +14,12 @@ def add_reviewers() -> dict:
     with open('reviewers.csv', 'r') as f:
         reader = csv.reader(f)
         for row in reader:
-            targetName = row[1]
-            targetId = row[2]
-            print(f"@ targetName: {targetName} ({targetId})")
+            target_name = row[1]
+            target_id = row[2]
+            print(f"@ targetName: {target_name} ({target_id})")
             
             try:
-                user = g.get_user(targetName)
+                user = g.get_user(target_name)
                 print(f"@ -> append.")
                 
                 target_data[target_id] = {"name": target_name, "user": user}
