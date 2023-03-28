@@ -5,14 +5,22 @@ on: [pull_request]
 jobs:
   xml_check:
     runs-on: ubuntu-latest
+    env:
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      GITHUB_API_URL: ${{ github.api_url }}
+      GITHUB_REPOSITORY: ${{ github.repository }}
+      PR_NUMBER: ${{ github.event.number }}
+      SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
+      SLACK_CHANNEL: "#xml更新監視所"
+
     steps:
     - name: Checkout code
-      uses: actions/checkout@v2
+      uses: actions/checkout@v2.4.3
       
-    - name: Setup Python
-      uses: actions/setup-python@v2
+    - name: Setup Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v2.4.2
       with:
-        python-version: 3.x
+        python-version: ${{ matrix.python-version }}
       
     - name: Install requests library
       run: pip install requests
@@ -23,18 +31,14 @@ jobs:
     - name: Install PyGithub
       run: pip install PyGithub
       
-    - name: Check XML change
+    - name: Download csv
       run: |
         repo_url=${{ github.repository }}
         csv_file="reviewers.csv"
         csv_url="https://raw.githubusercontent.com/$repo_url/develop/$csv_file"
         echo "CSV URL: $csv_url"
         wget $csv_url
+        
+    - name: Check XML change
+      run: |
         python xml_check.py
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        GITHUB_API_URL: ${{ github.api_url }}
-        GITHUB_REPOSITORY: ${{ github.repository }}
-        PR_NUMBER: ${{ github.event.number }}
-        SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
-        SLACK_CHANNEL: "#xml更新監視所"
