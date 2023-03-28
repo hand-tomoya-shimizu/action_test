@@ -5,13 +5,11 @@ from slack_sdk import WebClient
 from slack_sdk.errors import SlackApiError
 from github import Github, UnknownObjectException
 
-def add_reviewers():
+def add_reviewers() -> dict:
     print("@ add_reviewers()")
     g = Github(os.getenv('GITHUB_TOKEN'))
     
-    targetNames = []
-    targetIds = []
-    reviewers = []
+    target_data = {}
     
     with open('reviewers.csv', 'r') as f:
         reader = csv.reader(f)
@@ -24,20 +22,19 @@ def add_reviewers():
                 user = g.get_user(targetName)
                 print(f"@ -> append.")
                 
-                reviewers.append(user)
-                targetNames.append(targetName)
-                targetIds.append(targetId)
+                target_data[target_id] = {"name": target_name, "user": user}
                 
             except UnknownObjectException:
                 print(f"@ -> not exist.")
     
-    if len(reviewers) > 0:
+    if target_data:
         repo = g.get_repo( os.getenv('GITHUB_REPOSITORY') )
         pr_number = int(os.getenv('PR_NUMBER'))
         pr = repo.get_pull(pr_number)
         author = pr.user
         
-        for reviewer in reviewers:
+        for reviewer_id, reviewer_info in reviewer_data.items():
+            reviewer = reviewer_info.user
             print(f"@ reviewer: {reviewer}")
             
             if reviewer == author:
@@ -51,7 +48,7 @@ def add_reviewers():
                 print(f"@ Error: {reviewer.login} is not exist.")
                 continue
     
-    return targetIds
+    return target_data
 
 
 # プルリクエストのURL
@@ -75,7 +72,7 @@ diff_text = diff_response.text
 #print(f"@ diff_text: {diff_text}")
 
 if '.xml' in diff_text:
-    reviewerIds = add_reviewers()
+    reviewer_data = add_reviewers()
     
     print("プルリクエストでXMLファイルが変更されました")
     
@@ -92,9 +89,9 @@ if '.xml' in diff_text:
     
     message = ""
     
-    if len(reviewerIds) > 0:
-        for reviewerId in reviewerIds:
-            message += f"<@{reviewerId}>"
+    if reviewer_data:
+        for reviewer_id, reviewer_info in reviewer_data.items():
+            message += f"<@{reviewer_id}>"
         
         message += "\n"
     
@@ -103,11 +100,11 @@ if '.xml' in diff_text:
     
     try:
         response = client.chat_postMessage(channel=channelName, text=message)
-        print("Slackへの通知が完了しました")
+        print("Slack通知成功.")
     except SlackApiError as e:
-        print("Slackへの通知が失敗しました：{}".format(e))
+        raise Exception("Slack通知失敗. エラーFull:" + e.response["error"])
 else:
-    print("プルリクエストでXMLファイルは変更されていません")
+    print("プルリクエストでXMLファイルは変更されていません.")
 
 exit(0)
 
