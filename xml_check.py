@@ -33,7 +33,7 @@ def add_reviewers() -> dict:
         pr = repo.get_pull(pr_number)
         author = pr.user
         
-        for reviewer_id, reviewer_info in reviewer_data.items():
+        for reviewer_id, reviewer_info in target_data.items():
             reviewer = reviewer_info.user
             print(f"@ reviewer: {reviewer}")
             
