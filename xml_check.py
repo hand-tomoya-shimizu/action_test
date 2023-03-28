@@ -34,7 +34,7 @@ def add_reviewers() -> dict:
         author = pr.user
         
         for reviewer_id, reviewer_info in target_data.items():
-            reviewer = reviewer_info.user
+            reviewer = reviewer_info["user"]
             print(f"@ reviewer: {reviewer}")
             
             if reviewer == author:
